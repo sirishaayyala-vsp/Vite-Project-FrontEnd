@@ -25,7 +25,8 @@ export function EmployeeTable({
     {
       header: "Salary",
       accessor: "salary" as const,
-      render: (value: number) => `₹${value.toLocaleString()}`,
+      render: (value: number) =>
+        `₹${value.toLocaleString("en-IN")}`,
     },
   ];
 
@@ -36,7 +37,7 @@ export function EmployeeTable({
       getRowKey={(employee) => employee.id}
       emptyMessage="No employees found"
       renderActions={(employee) => (
-        <>
+        <div className="flex flex-wrap items-center gap-2">
           <Button onClick={() => onEditEmployee(employee)}>
             Edit
           </Button>
@@ -44,7 +45,7 @@ export function EmployeeTable({
           <Button onClick={() => onDeleteEmployee(employee.id)}>
             Delete
           </Button>
-        </>
+        </div>
       )}
     />
   );
