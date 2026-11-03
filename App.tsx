@@ -121,106 +121,156 @@ export function App() {
   }, [searchText, selectedDepartment, sortOption]);
 
   return (
-    <div>
-      <h1>Employee Management System</h1>
+    <div className="min-h-screen bg-slate-100">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 
-      <EmployeeForm
-        onAddEmployee={addEmployee}
-        selectedEmployee={selectedEmployee}
-        onUpdateEmployee={updateEmployee}
-      />
+        {/* Page Header */}
+        <header className="mb-8">
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+            Employee Management System
+          </h1>
 
-      <hr />
+          <p className="mt-2 text-sm text-slate-600">
+            Manage your employees, departments, salaries, and employee records.
+          </p>
+        </header>
 
-      <div>
-        <label>Search Employee: </label>
+        {/* Main Layout */}
+        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
 
-        <input
-          type="text"
-          value={searchText}
-          placeholder="Search by name"
-          onChange={(event) =>
-            setSearchText(event.target.value)
-          }
-        />
-      </div>
+          {/* Employee Form */}
+          <div className="lg:col-span-1">
+            <EmployeeForm
+              onAddEmployee={addEmployee}
+              selectedEmployee={selectedEmployee}
+              onUpdateEmployee={updateEmployee}
+            />
+          </div>
 
-      <br />
+          {/* Employee List Section */}
+          <div className="min-w-0 space-y-6 lg:col-span-2">
 
-      <div>
-        <label>Filter Department: </label>
+            {/* Search, Filter and Sort */}
+            <div className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+              <h2 className="mb-4 text-lg font-semibold text-slate-900">
+                Find Employees
+              </h2>
 
-        <select
-          value={selectedDepartment}
-          onChange={(event) =>
-            setSelectedDepartment(event.target.value)
-          }
-        >
-          <option value="All">All</option>
-          <option value="IT">IT</option>
-          <option value="HR">HR</option>
-          <option value="Finance">Finance</option>
-          <option value="Marketing">Marketing</option>
-        </select>
-      </div>
+              <div className="mb-4">
+              <label
+                htmlFor="employee-search"
+                className="mb-2 block text-sm font-medium text-slate-700"
+              >
+              Search Employees
+              </label>
+              <input
+                  id="employee-search"
+                  type="text"
+                  value={searchText}
+                  onChange={(event) => setSearchText(event.target.value)}
+                  placeholder="Search by employee name..."
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                />
+              </div>
 
-      <br />
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
-      <div>
-        <label>Sort By: </label>
+                {/* Department Filter */}
+                <div>
+                  <label
+                    htmlFor="department-filter"
+                    className="mb-2 block text-sm font-medium text-slate-700"
+                  >
+                    Filter by Department
+                  </label>
 
-        <select
-          value={sortOption}
-          onChange={(event) =>
-            setSortOption(event.target.value)
-          }
-        >
-          <option value="name-asc">Name A-Z</option>
-          <option value="name-desc">Name Z-A</option>
-          <option value="salary-asc">
-            Salary Low to High
-          </option>
-          <option value="salary-desc">
-            Salary High to Low
-          </option>
-        </select>
-      </div>
+                  <select
+                    id="department-filter"
+                    value={selectedDepartment}
+                    onChange={(event) =>
+                      setSelectedDepartment(event.target.value)
+                    }
+                    className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  >
+                    <option value="All">All Departments</option>
+                    <option value="IT">IT</option>
+                    <option value="HR">HR</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Marketing">Marketing</option>
+                  </select>
+                </div>
 
-      <br />
+                {/* Sort */}
+                <div>
+                  <label
+                    htmlFor="employee-sort"
+                    className="mb-2 block text-sm font-medium text-slate-700"
+                  >
+                    Sort By
+                  </label>
 
-      <EmployeeTable
-        employees={paginatedEmployees}
-        onDeleteEmployee={deleteEmployee}
-        onEditEmployee={editEmployee}
-      />
+                  <select
+                    id="employee-sort"
+                    value={sortOption}
+                    onChange={(event) =>
+                      setSortOption(event.target.value)
+                    }
+                    className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  >
+                    <option value="name-asc">Name A–Z</option>
+                    <option value="name-desc">Name Z–A</option>
+                    <option value="salary-asc">Salary: Low to High</option>
+                    <option value="salary-desc">Salary: High to Low</option>
+                  </select>
+                </div>
+              </div>
+            </div>
 
-      <div>
-        <button
-          type="button"
-          disabled={currentPage === 1}
-          onClick={() =>
-            setCurrentPage(currentPage - 1)
-          }
-        >
-          Previous
-        </button>
+            {/* Employee Table */}
+            <EmployeeTable
+              employees={paginatedEmployees}
+              onDeleteEmployee={deleteEmployee}
+              onEditEmployee={editEmployee}
+            />
 
-        <span>
-          {" "}
-          Page {currentPage} of {totalPages || 1}{" "}
-        </span>
+            {/* Pagination */}
+            <div className="flex flex-col items-center justify-between gap-4 rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:flex-row">
 
-        <button
-          type="button"
-          disabled={
-            currentPage === totalPages || totalPages === 0
-          }
-          onClick={() =>
-            setCurrentPage(currentPage + 1)
-          }
-        >
-          Next
-        </button>
+              <p className="text-sm text-slate-600">
+                Page {currentPage} of {totalPages || 1}
+              </p>
+
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  disabled={currentPage === 1}
+                  onClick={() =>
+                    setCurrentPage((page) => Math.max(page - 1, 1))
+                  }
+                  className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Previous
+                </button>
+
+                <button
+                  type="button"
+                  disabled={
+                    currentPage === totalPages || totalPages === 0
+                  }
+                  onClick={() =>
+                    setCurrentPage((page) =>
+                      Math.min(page + 1, totalPages)
+                    )
+                  }
+                  className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
     </div>
   );
