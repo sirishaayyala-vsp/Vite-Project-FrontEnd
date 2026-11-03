@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import type { FormEvent } from "react";
+
 import { TextInput } from "../TextInput/TextInput";
 import { Select } from "../Select/Select";
 import { Button } from "../Button";
@@ -39,19 +41,15 @@ export function EmployeeForm({
       setName(selectedEmployee.name);
       setDepartment(selectedEmployee.department);
       setSalary(String(selectedEmployee.salary));
-
-      setNameError(undefined);
-      setDepartmentError(undefined);
-      setSalaryError(undefined);
     } else {
       setName("");
       setDepartment("");
       setSalary("");
-
-      setNameError(undefined);
-      setDepartmentError(undefined);
-      setSalaryError(undefined);
     }
+
+    setNameError(undefined);
+    setDepartmentError(undefined);
+    setSalaryError(undefined);
   }, [selectedEmployee]);
 
   function validateForm() {
@@ -73,7 +71,11 @@ export function EmployeeForm({
 
     const salaryNumber = Number(salary);
 
-    if (!salary || salaryNumber <= 0) {
+    if (
+      !salary.trim() ||
+      !Number.isFinite(salaryNumber) ||
+      salaryNumber <= 0
+    ) {
       setSalaryError("Salary must be greater than 0");
       isValid = false;
     }
@@ -81,7 +83,7 @@ export function EmployeeForm({
     return isValid;
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (!validateForm()) {
@@ -117,7 +119,7 @@ export function EmployeeForm({
       title="Employee Information"
       description="Enter employee details below."
     >
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="w-full space-y-5">
         <TextInput
           label="Name"
           value={name}
